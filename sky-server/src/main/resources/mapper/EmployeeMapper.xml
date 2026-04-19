@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.EmployeeMapper">
     <update id="update" parameterType="Employee">
-<!--    配置文件里有配置包名，parameterType可以直接写类名不用写全名    -->
+<!--    配置文件里有配置包名,type-aliases-package: com.sky.entity，parameterType可以直接写类名不用写全名    -->
         update employee
         <set>
             <if test="name != null and name != '' ">name = #{name},</if>
@@ -11,9 +11,9 @@
             <if test="password != null and password != '' ">password = #{password},</if>
             <if test="phone != null and phone != '' ">phone = #{phone},</if>
             <if test="sex != null and sex != '' ">sex = #{sex},</if>
-            <if test="idNumber != null and idNumber != '' ">idNumber = #{idNumber},</if>
-            <if test="updateTime != null ">updateTime = #{updateTime},</if>
-            <if test="updateUser != null ">updateUser = #{updateUser},</if>
+            <if test="idNumber != null and idNumber != '' ">id_number = #{idNumber},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
             <if test="status != null ">status = #{status},</if>
         </set>
         where id=#{id}
