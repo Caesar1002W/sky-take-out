@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
@@ -8,12 +9,11 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/employee")
 @Slf4j
+@Api(tags = "员工相关接口")
 public class EmployeeController {
 
     @Autowired
@@ -37,6 +38,7 @@ public class EmployeeController {
      * @param employeeLoginDTO
      * @return
      */
+    @ApiOperation("员工登录")
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
@@ -66,9 +68,41 @@ public class EmployeeController {
      *
      * @return
      */
+    @ApiOperation("员工退出")
     @PostMapping("/logout")
     public Result<String> logout() {
         return Result.success();
     }
+
+    /**
+     * 新增员工
+     * @param employeeDTO
+     * @return
+     */
+    @PostMapping
+    @ApiOperation("新增员工")
+    public Result save(@RequestBody EmployeeDTO employeeDTO){ // json格式的数据别忘了加RequestBody
+        log.info("新增员工：{}", employeeDTO);
+        System.out.println("当前线程的ID： " + Thread.currentThread().getId());
+        employeeService.save(employeeDTO);
+        return Result.success();
+
+    }
+
+    /*
+    * 启用禁用员工账号
+    * @Param status
+    * @Param id
+    * @return*/
+    // 查询类把泛型加上，非查询类就不用了，因为不用返回result
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号")
+    // public Result startOrStop(@PathVariable("status") Integer status, Long id)
+    public Result startOrStop(@PathVariable Integer status, Long id){
+        log.info("启用禁用员工账号： 员工状态：{},员工id：{}", status, id);
+        employeeService.startOrStop(status, id);
+        return Result.success();
+    }
+
 
 }
