@@ -18,4 +18,14 @@
         </set>
         where id=#{id}
     </update>
+    <select id="pageQuery" resultType="com.sky.entity.Employee">
+<!--        注意，虽然返回值是Page<Employee>， 但Page本身是个ArrayList，所以没什么问题-->
+        select * from employee
+        <where>
+            <if test="name != '' and name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+        order by update_time desc
+    </select>
 </mapper>
